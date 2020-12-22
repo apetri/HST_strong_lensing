@@ -1,2 +1,2 @@
-# HST_strong_lensing
+# HST strong lensing
 HST lensing image analysis
