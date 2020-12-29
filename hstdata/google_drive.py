@@ -66,6 +66,11 @@ class SimulatedMapsManager(object):
 		else:
 			self.maps_metadata = None
 
+	# Available realizations
+	@property
+	def realizations(self):
+		return self.maps_metadata.realization.unique()
+
 	# Path to a specific realization/redshift/projection
 	def path(self,r,z,p):
 		return os.path.join(self.local_root,"D"+str(r),"map_{0:03d}_{1}_{2}_sph.fits".format(int(100*(z+1e-16)),r,p))
@@ -75,12 +80,16 @@ class SimulatedMapsManager(object):
 		return os.path.exists(self.path(r,z,p))
 
 	# Download map
-	def download(self,srv,r,z,p):
+	def download(self,srv,r,z,p,overwrite=False):
 		if self.maps_metadata is None:
 			raise OSError("No maps metadata present, need to generate that first")
 
-		# Find google drive ID of the map
 		fn = os.path.basename(self.path(r,z,p))
+		if not(overwrite) and self.isDownloaded(r,z,p):
+			print("[+] Map file {0} already downloaded".format(fn))
+			return
+
+		# Find google drive ID of the map
 		try:
 			fid = self.maps_metadata[self.maps_metadata.map_filename==fn].map_id.values[0]
 		except IndexError:
@@ -172,6 +181,8 @@ class SimulatedMapsManager(object):
 
 		# Compute critical density scaling
 		crit = 0.35/cosmo.angular_diameter_distance(head['ZL']).to(u.Gpc).value
+		data = (data*cnst.M_sun/(u.kpc**2)).to(u.g/(u.cm**2)).value
+		data = data/crit
 
 		# Return
 		angle = (data.shape[0]*np.abs(head['CDELT1'])*u.deg).to(u.arcsec)
