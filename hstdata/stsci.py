@@ -92,12 +92,19 @@ class Abell2744(object):
 			head = hdu[0].header
 			data = hdu[0].data
 
+		# Fill NaN with 0
+		data[np.isnan(data)] = 0.0
+
 		# Return
 		angle = (data.shape[0]*np.abs(head['CDELT1'])*u.deg).to(u.arcsec)
 		return angle,data
 
 
 	# Read one map into a ConvergenceMap instance
-	def loadKappaMap(self,n):
+	def loadKappaMap(self,n,callback=None):
 		fn = self.path(n)
-		return lt.image.convergence.ConvergenceMap.load(fn,format=self.loadFits)
+		img = lt.image.convergence.ConvergenceMap.load(fn,format=self.loadFits)
+		if callback is not None:
+			return callback(img)
+		else:
+			return img
