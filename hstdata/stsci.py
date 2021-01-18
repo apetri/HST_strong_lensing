@@ -33,6 +33,10 @@ class Abell2744(object):
 	def path(self,n):
 		return os.path.join(self._local_root,self.method,self.version,"range",self._map_filename_format.format(method=self.method,version=self.version,n=n))
 
+	@property
+	def datapath(self):
+		return os.path.join(self._local_root,self.method,self.version)
+
 	def getMapMetadata(self):
 		with urllib.request.urlopen(self._url_format.format(method=self.method,version=self.version)) as resp:
 			html = BeautifulSoup(resp.read(),"html.parser")
