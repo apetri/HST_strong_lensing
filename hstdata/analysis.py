@@ -2,12 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import astropy.units as u
 
-def plotPowerSpectrum(ell,p,label="default",theta_ticks=np.array([1.5,2,3,4,5,6])*u.arcsec,ax=None):
+def plotPowerSpectrum(ell,p,label="default",theta_ticks=np.array([1.5,2,3,4,5,6])*u.arcsec,ax=None,figsize=(12,8)):
 
 	# Init axes
 	if ax is None:
 		init_ax = True
-		fig,ax = plt.subplots()
+		fig,ax = plt.subplots(figsize=figsize)
 	else:
 		fig = None
 		init_ax = False
@@ -24,9 +24,9 @@ def plotPowerSpectrum(ell,p,label="default",theta_ticks=np.array([1.5,2,3,4,5,6]
 		ax1.set_xticklabels([str(x.value) for x in theta_ticks])
 
 		# Legends
-		ax.set_xlabel(r'$\ell$')
-		ax1.set_xlabel(r'$\theta$ (arcsec)')
-		ax.set_ylabel(r'$\ell^2P_{\kappa\kappa}(\ell)/2\pi$')
+		ax.set_xlabel(r'$\ell$',fontsize=18)
+		ax1.set_xlabel(r'$\theta$ (arcsec)',fontsize=18)
+		ax.set_ylabel(r'$\ell^2P_{\kappa\kappa}(\ell)/2\pi$',fontsize=18)
 	
 	# Return
 	return fig,ax

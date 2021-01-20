@@ -99,6 +99,10 @@ class Abell2744(object):
 		# Fill NaN with 0
 		data[np.isnan(data)] = 0.0
 
+		# Cut map into a square
+		nside = min(data.shape)
+		data = data[:nside,:nside]
+
 		# Return
 		angle = (data.shape[0]*np.abs(head['CDELT1'])*u.deg).to(u.arcsec)
 		return angle,data
