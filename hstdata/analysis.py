@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import astropy.units as u
 
-def plotPowerSpectrum(ell,p,label="default",theta_ticks=np.array([1.5,2,3,4,5,6])*u.arcsec,ax=None,figsize=(12,8)):
+def plotPowerSpectrum(ell,p,label="default",theta_ticks=np.array([1.5,2,3,4,5,6])*u.arcsec,vlines=np.array([2,5])*u.arcsec,ax=None,figsize=(12,8)):
 
 	# Init axes
 	if ax is None:
@@ -22,6 +22,12 @@ def plotPowerSpectrum(ell,p,label="default",theta_ticks=np.array([1.5,2,3,4,5,6]
 		ax1.set_xticks(2*np.pi/theta_ticks.to(u.rad).value)
 		ax1.set_xlim(ax.get_xlim())
 		ax1.set_xticklabels([str(x.value) for x in theta_ticks])
+
+		# Vertical reference lines
+		ell_vlines = 2*np.pi/vlines.to(u.rad).value
+		for v in ell_vlines:
+			ax.axvline(v,color='grey',lw=3)
+		ax.axvspan(ell_vlines.min(),ell_vlines.max(),color='grey',alpha=0.3)
 
 		# Legends
 		ax.set_xlabel(r'$\ell$',fontsize=18)
